@@ -28,5 +28,7 @@ body {
   background-color: #333;
   height: auto;
   min-height: 100%;
+  padding: 0;
+  margin: 0;
 }
 </style>

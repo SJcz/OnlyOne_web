@@ -39,6 +39,7 @@ export default {
     text-align: center;
     background-color: #333;
     height: 100%;
+    background-image: url('../assets/index-background.jpg');
   }
 
   .main {
@@ -70,6 +71,11 @@ export default {
   }
 
   a {
-    text-decoraction: none;
-  }
+    text-decoration:none ; 
+    color: #333;
+}
+.router-link-active {
+    text-decoraction: none ;
+    color: #333;
+}
 </style>
