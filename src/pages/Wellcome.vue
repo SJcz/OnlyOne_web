@@ -2,16 +2,18 @@
   <div class="wellcome" >
     <el-row>
     <el-col :span="8" :offset="8">
-      <el-container>
+      <el-container style="height: 100%">
       <el-header></el-header>
       <el-main class="main"> 
-        <h1 class="cover-heading">Cover your page.</h1>
-        <p>Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+        <h1 class="cover-heading"> Only One</h1>
+        <p>只有一个房间的聊天室</p>
+        <p> 每次进入赋予一个全新的身份 </p> 
+        <p>进来就是开始, 离开就是结束...</p>
         <p class="lead">
           <button><router-link to="/chat">进入OnlyOne</router-link></button>
         </p>
       </el-main>
-      <el-footer></el-footer>
+      <el-footer class="el-footer"></el-footer>
     </el-container>
       
     </el-col>
@@ -25,7 +27,6 @@ export default {
   name: 'Wellcome',
   data () {
     return {
-      background_image: require('@/assets/index-background.jpg'),
       msg: 'Welcome to Your Vue.js App'
     }
   }
@@ -42,8 +43,9 @@ export default {
     background-image: url('../assets/index-background.jpg');
   }
 
+
   .main {
-    margin-top: 50%;;
+    margin-top: 25%;
   }
 
   .cover-heading {
@@ -53,7 +55,7 @@ export default {
   }
 
   p {
-    font-size: 1.25rem;
+    font-size: 1.20rem;
     font-weight: 300;
   }
 
