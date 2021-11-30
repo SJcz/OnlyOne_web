@@ -69,9 +69,6 @@ export default {
   margin: 30rpx 10rpx;
 }
 
-.time-tip-div {
-
-}
 
 .left-chat-content-div {
   display: flex;

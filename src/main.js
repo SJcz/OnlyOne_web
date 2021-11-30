@@ -2,8 +2,8 @@ import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import App from './App.vue'
-import Wellcome from './pages/Wellcome'
-import Chat from './pages/Chat'
+import Wellcome from './pages/Wellcome.vue'
+import Chat from './pages/Chat.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 
@@ -19,7 +19,7 @@ const routes = [
 // 你可以在这里输入更多的配置，但我们在这里
 // 暂时保持简单
 const router = createRouter({
-    history: createWebHistory(),
+  history: createWebHistory(),
   routes, // `routes: routes` 的缩写
 })
 
