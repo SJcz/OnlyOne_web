@@ -3,7 +3,7 @@
   <div class="chat-item" v-for="chat in chatList" :key="chat">
     <div class="time-tip-view"></div>
     <div v-if="chat.role === 'other'" class="left-chat-content-view">
-      <!-- <el-image class="user-avatar"></el-image> -->
+      <el-image class="user-avatar" :src="chat.sender.avatar"></el-image>
       <div v-if="chat.type == 'text'" class="other-text-view">{{chat.content}}</div>
       <div v-else-if="chat.type == 'picture'" class="picture-view">
         <el-image :src="chat.path"></el-image>
@@ -20,7 +20,7 @@
       <div v-else-if="chat.type == 'voice'" class="self-voice-view">
         <el-image :src="chat.path" :click="playVoice"></el-image>
       </div>
-      <!-- <el-image class="user-avatar"></el-image> -->
+      <el-image class="user-avatar" :src="chat.sender.avatar"></el-image>
     </div>
   </div>
 </el-scrollbar>
@@ -84,10 +84,10 @@ export default {
 }
 
 .user-avatar {
-  width: 70rpx;
-  height: 70rpx;
-  border-radius: 5rpx;
-  margin: 0 30rpx;
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
+  margin: 0 25px;
 }
 
 .other-text-div {

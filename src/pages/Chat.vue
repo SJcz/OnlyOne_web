@@ -13,6 +13,8 @@
 import ChatInput from "../components/ChatInput.vue";
 import RoomHeader from "../components/RoomHeader.vue";
 import ScrollView from "../components/ScrollView.vue";
+import WebsocketSession from '../utils/websocketSession';
+
 export default {
 	components: {
 		"room-header": RoomHeader,
@@ -23,44 +25,44 @@ export default {
 	data() {
 		return {
 			msg: "",
-			websocket: null,
+			websocketSession: null,
       chatList: [],
       roomName: 'onlyOne',
+      curUser: null
 		};
 	},
 	methods: {
 		initWebsocket() {
 			const wsuri = "ws://127.0.0.1:9090";
-			this.websocket = new WebSocket(wsuri);
-			this.websocket.onmessage = this.websocket_onMessage;
-			this.websocket.onopen = this.websocket_onOpen;
-			this.websocket.onerror = this.websocket_onError;
-			this.websocket.onclose = this.websocket_onClose;
+			const websocket = new WebSocket(wsuri);
+      this.websocketSession = new WebsocketSession(websocket);
+			this.websocketSession.on('open', this.websocket_onOpen.bind(this));
+      this.websocketSession.on('error', this.websocket_onError.bind(this));
+      this.websocketSession.on('close', this.websocket_onClose.bind(this));
+      this.websocketSession.on('push', this.websocket_onPush.bind(this));
 		},
 
-    websocket_onMessage(msg) {
-      const message = JSON.parse(msg.data);
-      console.log(message);
-			if (message.type === 'push') {
-        switch(message.route) {
+    websocket_onPush(message) {
+			switch(message.route) {
           case 'room.join':
             this.messageHandler_joinRoom(message.data);
             break;
           case 'room.chat':
-            this.messageHandler_roomChat(message.data)
+            this.messageHandler_roomChat(message.data);
+            break;
         } 
-      }
     },
     websocket_onOpen() {
-      //连接建立之后执行send方法发送数据
-			this.websocket.send(
-				JSON.stringify({
-					route: "roomHandler.joinRoom",
-					data: {
-						roomName: this.roomName,
-					},
-				})
-			);
+      // 连接建立之后执行send方法发送数据
+      this.websocketSession.request({
+				route: "roomHandler.joinRoom",
+				data: {
+					roomName: this.roomName,
+				},
+			}).then(result => {
+        console.log(result);
+        this.curUser = result.user;
+      }).catch(console.log)
     },
     websocket_onClose(e) {
       console.log("断开连接", e);
@@ -78,13 +80,14 @@ export default {
     },
 
     sendChat(chat) {
-      this.websocket.send(JSON.stringify({
+      if (!this.curUser) return;
+      this.websocketSession.send({
         route: 'chatHandler.chat',
         data: {
           roomName: this.roomName,
           chat
         }
-      }))
+      })
     }
 	},
 	unmounted() {
