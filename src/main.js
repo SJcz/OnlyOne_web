@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import ElementPlus from 'element-plus'
+import ElementPlus, { ElIcon } from 'element-plus'
 import 'element-plus/dist/index.css'
 import App from './App.vue'
 import Wellcome from './pages/Wellcome.vue'
@@ -26,5 +26,6 @@ const router = createRouter({
 const app = createApp(App)
 
 app.use(ElementPlus)
+app.use(ElIcon)
 app.use(router)
 app.mount('#app')

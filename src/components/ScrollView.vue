@@ -1,32 +1,29 @@
 <template>
-    <div class='main'>
-<el-scrollbar>
-    <div v-for="item in chatList" :key="item" class="chat-item">
-        <div class="time-tip-div"></div>
-        <div wx:if="{{item.role == 'other'}}" class="left-chat-content-div">
-      <el-image src="{{item.avatar}}" class="user-avatar"></el-image>
-      <div wx:if="{{item.type == 'text'}}" class="other-text-div">{{item.content}}</div>
-      <div wx:elif="{{item.type == 'picture'}}" class="picture-div">
-        <el-image src="{{item.path}}" bindtap="divFullPicture" mode="aspectFit" data-path="{{item.path}}"></el-image>
+<el-scrollbar class="scrollbar" max-height="400px">
+  <div class="chat-item" v-for="chat in chatList" :key="chat">
+    <div class="time-tip-view"></div>
+    <div v-if="chat.role === 'other'" class="left-chat-content-view">
+      <!-- <el-image class="user-avatar"></el-image> -->
+      <div v-if="chat.type == 'text'" class="other-text-view">{{chat.content}}</div>
+      <div v-else-if="chat.type == 'picture'" class="picture-view">
+        <el-image :src="chat.path"></el-image>
       </div>
-      <div wx:elif="{{item.type == 'voice'}}" class="other-voice-div">
-        <el-image src="{{voiceIcon}}" bindtap="playVoice" data-path="{{item.path}}" ></el-image>
+      <div v-else-if="chat.type == 'voice'" class="other-voice-view">
+        <el-image :src="chat.path" :click="playVoice"></el-image>
       </div>
     </div>
-    <div wx:else class="right-chat-content-div">
-      <div wx:if="{{item.type == 'text'}}" class="self-text-div">{{item.content}}</div>
-      <div wx:elif="{{item.type == 'picture'}}" class="picture-div">
-        <el-image src="{{item.path}}" bindtap="divFullPicture" mode="aspectFit" data-path="{{item.path}}"></el-image>
+    <div v-else class="right-chat-content-view">
+      <div v-if="chat.type == 'text'" class="self-text-view">{{chat.content}}</div>
+      <div v-else-if="chat.type == 'picture'" class="picture-view">
+        <el-image :src="chat.path"></el-image>
       </div>
-      <div wx:elif="{{item.type == 'voice'}}" class="self-voice-div">
-        <el-image src="{{voiceIcon}}" bindtap="playVoice" data-path="{{item.path}}"></el-image>
+      <div v-else-if="chat.type == 'voice'" class="self-voice-view">
+        <el-image :src="chat.path" :click="playVoice"></el-image>
       </div>
-      <el-image src="{{item.avatar}}" class="user-avatar"></el-image>
+      <!-- <el-image class="user-avatar"></el-image> -->
     </div>
-    </div>
-
+  </div>
 </el-scrollbar>
-    </div>
 </template>
 
 <script>
@@ -39,7 +36,6 @@ export default {
   name: 'ScrollView',
   data () {
     return {
-      messageList: []
     }
   },
   methods () {
@@ -65,6 +61,11 @@ export default {
 </script>
 
 <style scoped>
+.scrollbar {
+  background-color: white;
+  height: 400px;
+  
+}
 .chat-item {
   margin: 30rpx 10rpx;
 }

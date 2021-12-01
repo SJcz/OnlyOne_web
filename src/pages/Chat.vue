@@ -2,8 +2,8 @@
 	<el-container>
 		<el-container>
 			<el-header><room-header></room-header></el-header>
-			<el-main><scroll-view></scroll-view></el-main>
-			<el-footer><chat-input></chat-input></el-footer>
+			<el-main class="el-main"><scroll-view :chat-list="chatList"></scroll-view></el-main>
+			<el-footer><chat-input @send="sendChat"></chat-input></el-footer>
 		</el-container>
 		<el-aside width="200px">Aside</el-aside>
 	</el-container>
@@ -24,47 +24,67 @@ export default {
 		return {
 			msg: "",
 			websocket: null,
+      chatList: [],
+      roomName: 'onlyOne',
 		};
 	},
 	methods: {
 		initWebsocket() {
 			const wsuri = "ws://127.0.0.1:9090";
 			this.websocket = new WebSocket(wsuri);
-			this.websocket.onmessage = this.websocketonmessage;
-			this.websocket.onopen = this.websocketonopen;
-			this.websocket.onerror = this.websocketonerror;
-			this.websocket.onclose = this.websocketclose;
+			this.websocket.onmessage = this.websocket_onMessage;
+			this.websocket.onopen = this.websocket_onOpen;
+			this.websocket.onerror = this.websocket_onError;
+			this.websocket.onclose = this.websocket_onClose;
 		},
-		websocketonopen() {
-			//连接建立之后执行send方法发送数据
+
+    websocket_onMessage(msg) {
+      const message = JSON.parse(msg.data);
+      console.log(message);
+			if (message.type === 'push') {
+        switch(message.route) {
+          case 'room.join':
+            this.messageHandler_joinRoom(message.data);
+            break;
+          case 'room.chat':
+            this.messageHandler_roomChat(message.data)
+        } 
+      }
+    },
+    websocket_onOpen() {
+      //连接建立之后执行send方法发送数据
 			this.websocket.send(
 				JSON.stringify({
 					route: "roomHandler.joinRoom",
-					params: {
-						roomName: "onlyOne",
+					data: {
+						roomName: this.roomName,
 					},
 				})
 			);
-		},
-		websocketonerror(err) {
-			console.log(err);
-			this.initWebsocket();
-		},
-		websocketonmessage(message) {
-      const data = JSON.parse(message.data);
-			if (data.type === 'push') {
-        switch(data.route) {
-          case 'joinRoom':
-            this.messageHandler_joinRoom(data.params)
-        } 
-      }
-		},
-		websocketclose(e) {
-			//关闭
-			console.log("断开连接", e);
-		},
+    },
+    websocket_onClose(e) {
+      console.log("断开连接", e);
+    },
+    websocket_onError(err) {
+      console.log(err);
+    },
+
     messageHandler_joinRoom() {
 
+    },
+
+    messageHandler_roomChat(data) {
+      this.chatList.push(data.chat);
+    },
+
+    sendChat(chat) {
+      this.websocket.send(JSON.stringify({
+        route: 'chatHandler.chat',
+        data: {
+          roomName: this.roomName,
+          chat
+        }
+      }))
     }
 	},
 	unmounted() {
@@ -81,4 +101,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.el-main {
+  padding: 0 20px;
+}
 </style>
