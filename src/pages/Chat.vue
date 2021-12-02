@@ -38,6 +38,15 @@ export default {
     },
   },
   methods: {
+    uuid() {
+      let s = [];
+      let hexDigits = "0123456789abcdef";
+      for (var i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+      }
+      s[8] = s[13] = s[18] = s[23] = "-";
+      return s.join("");
+    },
     initWebsocket() {
       const wsuri = "ws://127.0.0.1:9090";
       const websocket = new WebSocket(wsuri);
@@ -81,6 +90,7 @@ export default {
     messageHandler_joinRoom() {},
 
     messageHandler_roomChat(data) {
+      data.scrollId = "chat-" + this.uuid();
       this.chatList.push(data);
     },
 

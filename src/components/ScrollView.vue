@@ -1,7 +1,14 @@
 <template>
   <el-scrollbar class="scrollbar" max-height="400px" ref="scrollbar">
-    <scroll-view-item v-for="item in chatList" :key="item" :item="item">
-    </scroll-view-item>
+    <div ref="inner" id="inner">
+      <scroll-view-item
+        v-for="item in chatList"
+        :key="item"
+        :item="item"
+        :id="item.scrollId"
+      >
+      </scroll-view-item>
+    </div>
   </el-scrollbar>
 </template>
 
@@ -19,18 +26,14 @@ export default {
   data() {
     return {};
   },
-  methods: {
-    inputSlider(value) {
-      console.log(value);
-      console.log(this.$refs.scrollbar);
-      this.$refs.scrollbar.setScrollTop(value);
-    },
-  },
   watch: {
     chatList: {
-      handler(oldVal, newVal) {
-        console.log(newVal);
-        this.inputSlider(10000);
+      handler() {
+        this.$nextTick(() => {
+          document
+            .getElementById(this.chatList[this.chatList.length - 1].scrollId)
+            .scrollIntoView();
+        });
       },
       deep: true,
     },
