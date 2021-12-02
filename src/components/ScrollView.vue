@@ -1,168 +1,46 @@
 <template>
-<el-scrollbar class="scrollbar" max-height="400px">
-  <div class="chat-item" v-for="chat in chatList" :key="chat">
-    <div class="time-tip-view"></div>
-    <div v-if="chat.role === 'other'" class="left-chat-content-view">
-      <el-image class="user-avatar" :src="chat.sender.avatar"></el-image>
-      <div v-if="chat.type == 'text'" class="other-text-view">{{chat.content}}</div>
-      <div v-else-if="chat.type == 'picture'" class="picture-view">
-        <el-image :src="chat.path"></el-image>
-      </div>
-      <div v-else-if="chat.type == 'voice'" class="other-voice-view">
-        <el-image :src="chat.path" :click="playVoice"></el-image>
-      </div>
-    </div>
-    <div v-else class="right-chat-content-view">
-      <div v-if="chat.type == 'text'" class="self-text-view">{{chat.content}}</div>
-      <div v-else-if="chat.type == 'picture'" class="picture-view">
-        <el-image :src="chat.path"></el-image>
-      </div>
-      <div v-else-if="chat.type == 'voice'" class="self-voice-view">
-        <el-image :src="chat.path" :click="playVoice"></el-image>
-      </div>
-      <el-image class="user-avatar" :src="chat.sender.avatar"></el-image>
-    </div>
-  </div>
-</el-scrollbar>
+  <el-scrollbar class="scrollbar" max-height="400px" ref="scrollbar">
+    <scroll-view-item v-for="item in chatList" :key="item" :item="item">
+    </scroll-view-item>
+  </el-scrollbar>
 </template>
 
 <script>
+import ScrollViewItem from "./ScrollViewItem.vue";
 export default {
+  components: {
+    "scroll-view-item": ScrollViewItem,
+  },
   props: {
     chatList: Array,
-    swiperHeight: Number
+    swiperHeight: Number,
   },
-
-  name: 'ScrollView',
-  data () {
-    return {
-    }
+  name: "ScrollView",
+  data() {
+    return {};
   },
-  methods () {
-    return {
-      // 点击预览图片
-      divFullPicture: function () {
-        // var path = e.currentTarget.dataset.path
-        // wx.predivImage({
-        //   current: path,
-        //   urls: [path]
-        // })
+  methods: {
+    inputSlider(value) {
+      console.log(value);
+      console.log(this.$refs.scrollbar);
+      this.$refs.scrollbar.setScrollTop(value);
+    },
+  },
+  watch: {
+    chatList: {
+      handler(oldVal, newVal) {
+        console.log(newVal);
+        this.inputSlider(10000);
       },
-      // 点击播放语音
-      playVoice: function () {
-        // var path = e.currentTarget.dataset.path
-        // wx.playVoice({
-        //   filePath: path
-        // })
-      }
-    }
-  }
-}
+      deep: true,
+    },
+  },
+};
 </script>
 
 <style scoped>
 .scrollbar {
-  background-color: white;
+  background-color: #eee;
   height: 400px;
-  
-}
-.chat-item {
-  margin: 30rpx 10rpx;
-}
-
-
-.left-chat-content-div {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-
-.right-chat-content-div{
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-
-.user-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 3px;
-  margin: 0 25px;
-}
-
-.other-text-div {
-  position: relative;
-  background-color: #fff;
-  color: #000;
-  padding: 10rpx;
-  border-radius: 10rpx;
-  max-width: 70%;
-  word-wrap:break-word; /*因为数字和字母不会自动换行，导致内容溢出*/
-}
-
-.other-text-div::before, .other-voice-div::before{
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  top: 16rpx;
-  left: -28rpx;
-  border: solid 14rpx;
-  border-color: #eee #fff #eee #eee;
-}
-
-.self-text-div {
-  position: relative;
-  background-color: #52b061;
-  color: #fff;
-  padding: 10rpx;
-  border-radius: 10rpx;
-  max-width: 70%;
-  word-wrap:break-word;
-}
-
-.self-text-div::before, .self-voice-div::before{
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  top: 16rpx;
-  right: -28rpx;
-  border: solid 14rpx;
-  border-color: #eee #eee #eee #52b061;
-}
-
-.picture-div image{
-  border-radius: 10rpx;
-  background-color: #fff;
-  width: 200px;
-}
-
-.other-voice-div {
-  position: relative;
-  background-color: #fff;
-  border-radius: 10rpx;
-  width: 100rpx;
-  text-align: center;
-}
-
-.other-voice-div image{
-  width: 50rpx;
-  height: 50rpx;
-  margin-top: 10rpx;
-}
-
-.self-voice-div {
-  position: relative;
-  background-color: #52b061;
-  border-radius: 10rpx;
-  width: 100rpx;
-  text-align: center;
-}
-
-.self-voice-div image{
-  width: 50rpx;
-  height: 50rpx;
-  margin-top: 10rpx;
 }
 </style>

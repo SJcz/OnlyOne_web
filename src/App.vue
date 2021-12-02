@@ -24,7 +24,6 @@ html {
 
 body {
   box-shadow: inset 0 0 5rem rgb(0 0 0 / 50%);
-  text-shadow: 0 0.05rem 0.1rem rgb(0 0 0 / 50%);
   display: flex;
   color: #fff;
   background-color: #333;

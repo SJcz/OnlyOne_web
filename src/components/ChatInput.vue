@@ -22,7 +22,6 @@ export default {
   },
   methods: {
     sendMessage() {
-      console.log(this.textarea)
       if (!this.textarea || !this.textarea.trim()) return;
       this.$emit('send', {
         type: 'text',

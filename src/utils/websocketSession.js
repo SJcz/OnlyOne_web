@@ -42,7 +42,6 @@ class WebsocketSession extends EventTarget {
         };
         this.websocket.onmessage = msg => {
             const message = JSON.parse(msg.data);
-            console.log(message);
 			if (message.type === 'response') {
                 if (message.requestId && this.pendingRequest[message.requestId]) {
                     if (message.code == 0) {
@@ -68,6 +67,7 @@ class WebsocketSession extends EventTarget {
 
     request(msg) {
         msg.requestId = ++this.requestIndex;
+        msg.type = 'request';
         const promise = new Promise((resolve, reject) => {
             this.pendingRequest[msg.requestId] = {
                 _resolve: resolve,
@@ -76,6 +76,11 @@ class WebsocketSession extends EventTarget {
         });
         this.send(msg);
         return promise;
+    }
+
+    close() {
+        if (this.state !== ST_INITED) return;
+        this.websocket.close();
     }
 
 
