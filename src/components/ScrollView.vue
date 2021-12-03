@@ -43,7 +43,8 @@ export default {
 
 <style scoped>
 .scrollbar {
-  background-color: #eee;
   height: 400px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 </style>

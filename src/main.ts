@@ -7,7 +7,6 @@ import Chat from './pages/Chat.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { createStore } from 'vuex'
 
-
 // 2. 定义一些路由
 // 每个路由都需要映射到一个组件。
 // 我们后面再讨论嵌套路由。
@@ -27,17 +26,17 @@ const router = createRouter({
 const app = createApp(App)
 
 const store = createStore({
-    state () {
-      return {
-        user: null
-      }
-    },
-    mutations: {
-      update(state, user) {
-        state.user = user
-      }
+  state() {
+    return {
+      user: null
     }
-  })
+  },
+  mutations: {
+    update(state: any, user) {
+      state.user = user
+    }
+  }
+})
 
 app.use(ElementPlus)
 app.use(router)

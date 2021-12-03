@@ -1,18 +1,19 @@
 <template>
-  <el-container>
+  <el-container class="outer-container">
     <el-container>
-      <el-header><room-header></room-header></el-header>
+      <el-header><room-header :room-id="roomId"></room-header></el-header>
       <el-main class="el-main"
         ><scroll-view :chat-list="chatList"></scroll-view
       ></el-main>
       <el-footer><chat-input @send="sendChat"></chat-input></el-footer>
     </el-container>
-    <el-aside width="200px">Aside</el-aside>
+    <el-aside width="200px"><room-aside></room-aside></el-aside>
   </el-container>
 </template>
 
-<script>
+<script >
 import ChatInput from "../components/ChatInput.vue";
+import RoomAside from "../components/RoomAside.vue";
 import RoomHeader from "../components/RoomHeader.vue";
 import ScrollView from "../components/ScrollView.vue";
 import WebsocketSession from "../utils/websocketSession";
@@ -22,6 +23,7 @@ export default {
     "room-header": RoomHeader,
     "chat-input": ChatInput,
     "scroll-view": ScrollView,
+    "room-aside": RoomAside,
   },
   name: "Chat",
   data() {
@@ -120,6 +122,35 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .el-main {
-  padding: 0 20px;
+  background-color: #eee;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+}
+.el-footer {
+  background-color: #eee;
+  border-bottom: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-bottom-left-radius: 5px;
+  padding: 10px;
+  height: 100px;
+}
+.el-header {
+  background-color: #eee;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-top-left-radius: 5px;
+}
+.el-aside {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.outer-container {
+  width: 70%;
+  margin: auto;
+  margin-top: 50px;
 }
 </style>

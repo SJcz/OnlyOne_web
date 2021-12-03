@@ -2,26 +2,22 @@
   <router-view></router-view>
 </template>
 
-<script>
-// import Chat from './components/Chat.vue'
-// import Wellcome from './pages/Wellcome.vue'
+<script >
+import { Options, Vue } from "vue-class-component";
 
-export default {
-  name: 'App',
-  components: {
-  }
-}
+@Options({
+  components: {},
+})
+export default class App extends Vue {}
 </script>
 
 <style>
 #app {
   width: 100%;
 }
-
 html {
   height: 100%;
 }
-
 body {
   box-shadow: inset 0 0 5rem rgb(0 0 0 / 50%);
   display: flex;

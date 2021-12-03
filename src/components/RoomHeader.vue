@@ -1,21 +1,35 @@
 <template>
-    <div class='header'>
-        {{roomName}}
-    </div>
+  <div class="header">
+    <span>{{ roomId }}</span>
+  </div>
 </template>
 
-<script>
+<script >
 export default {
-  name: 'RoomHeader',
-  data () {
-    return {
-      roomName: ''
-    }
+  props: {
+    roomId: String,
   },
-  methods () {
-    return {
-
-    }
-  }
-}
+  name: "RoomHeader",
+  data() {
+    return {};
+  },
+  methods() {
+    return {};
+  },
+};
 </script>
+
+
+<style scoped>
+.header {
+  height: 100%;
+  color: #000;
+  font-size: larger;
+}
+
+.header span {
+  display: block;
+  position: relative;
+  top: 20px;
+}
+</style>
