@@ -7,7 +7,9 @@
       ></el-main>
       <el-footer><chat-input @send="sendChat"></chat-input></el-footer>
     </el-container>
-    <el-aside width="200px"><room-aside></room-aside></el-aside>
+    <el-aside width="200px"
+      ><room-aside :user-count="userCount"></room-aside
+    ></el-aside>
   </el-container>
 </template>
 
@@ -32,6 +34,7 @@ export default {
       websocketSession: null,
       chatList: [],
       roomId: "onlyOne",
+      userCount: 0,
     };
   },
   computed: {
@@ -79,6 +82,18 @@ export default {
         })
         .then((result) => {
           this.$store.commit("update", result.user);
+          setInterval(() => {
+            this.websocketSession
+              .request({
+                route: "roomHandler.getRoomAllUserNum",
+                data: {
+                  room_id: this.roomId,
+                },
+              })
+              .then((num) => {
+                this.userCount = num;
+              });
+          }, 2000);
         })
         .catch(console.log);
     },

@@ -29,6 +29,7 @@ export default {
         type: "text",
         content: this.textarea,
       });
+      this.textarea = "";
     },
     keyDown(e) {
       if (e.ctrlKey) {

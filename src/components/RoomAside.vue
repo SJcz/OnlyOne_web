@@ -1,11 +1,14 @@
 <template>
   <div class="aside">
-    {{ roomId }}
+    {{ userCount }}
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    userCount: Number,
+  },
   name: "RoomAside",
   data() {
     return {};
