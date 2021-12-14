@@ -1,6 +1,7 @@
 <template>
   <div class="aside">
-    {{ userCount }}
+    <p>每 10s 刷新一次在线人数</p>
+    当前房间在线人数: {{ userCount }}
   </div>
 </template>
 
@@ -22,6 +23,12 @@ export default {
 
 <style scoped>
 .aside {
-  height: 100%;
+  color: black;
+  padding: 10px;
+}
+
+p {
+  font-size: small;
+  color: #777;
 }
 </style>

@@ -1,15 +1,17 @@
 <template>
   <el-container class="outer-container">
-    <el-container>
-      <el-header><room-header :room-id="roomId"></room-header></el-header>
-      <el-main class="el-main"
-        ><scroll-view :chat-list="chatList"></scroll-view
-      ></el-main>
-      <el-footer><chat-input @send="sendChat"></chat-input></el-footer>
-    </el-container>
-    <el-aside width="200px"
+    <el-header><room-header :room-id="roomId"></room-header></el-header>
+      <el-container>
+        <el-container>
+          <el-main class="el-main"
+          ><scroll-view :chat-list="chatList"></scroll-view
+          ></el-main>
+          <el-footer><chat-input @send="sendChat"></chat-input></el-footer>
+        </el-container>
+      <el-aside width="200px"
       ><room-aside :user-count="userCount"></room-aside
     ></el-aside>
+    </el-container>
   </el-container>
 </template>
 
@@ -19,6 +21,7 @@ import RoomAside from "../components/RoomAside.vue";
 import RoomHeader from "../components/RoomHeader.vue";
 import ScrollView from "../components/ScrollView.vue";
 import WebsocketSession from "../utils/websocketSession";
+import config from "../config/config"
 
 export default {
   components: {
@@ -53,7 +56,7 @@ export default {
       return s.join("");
     },
     initWebsocket() {
-      const wsuri = "ws://127.0.0.1:9090";
+      const wsuri = `ws://${config.ws_server_host}:${config.ws_server_port}`;
       const websocket = new WebSocket(wsuri);
       this.websocketSession = new WebsocketSession(websocket);
       this.websocketSession.on("open", this.websocket_onOpen.bind(this));
@@ -63,6 +66,7 @@ export default {
     },
 
     websocket_onPush(message) {
+      console.log(message)
       switch (message.route) {
         case "room.join":
           this.messageHandler_joinRoom(message.data);
@@ -82,6 +86,16 @@ export default {
         })
         .then((result) => {
           this.$store.commit("update", result.user);
+           this.websocketSession
+              .request({
+                route: "roomHandler.getRoomAllUserNum",
+                data: {
+                  room_id: this.roomId,
+                },
+              })
+              .then((num) => {
+                this.userCount = num + 1;
+              });
           setInterval(() => {
             this.websocketSession
               .request({
@@ -93,7 +107,7 @@ export default {
               .then((num) => {
                 this.userCount = num;
               });
-          }, 2000);
+          }, 10000);
         })
         .catch(console.log);
     },
@@ -138,7 +152,6 @@ export default {
 <style scoped>
 .el-main {
   background-color: #eee;
-  border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   border-top: 1px solid #ddd;
 }
@@ -155,11 +168,11 @@ export default {
   border-top: 1px solid #ddd;
   border-left: 1px solid #ddd;
   border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 .el-aside {
   background-color: #eee;
   border: 1px solid #ddd;
-  border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 
