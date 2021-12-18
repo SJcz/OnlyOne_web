@@ -1,16 +1,18 @@
 <template>
-  <el-container class="outer-container">
-    <el-container>
-      <el-header><room-header :room-id="roomId"></room-header></el-header>
-      <el-main class="el-main"
-        ><scroll-view :chat-list="chatList"></scroll-view
-      ></el-main>
-      <el-footer><chat-input @send="sendChat"></chat-input></el-footer>
+  <div class="outer-div">
+    <el-container class="outer-container">
+      <el-aside width="200px"
+        ><room-aside :user-count="userCount"></room-aside
+      ></el-aside>
+      <el-container>
+        <el-header><room-header :room-id="roomId"></room-header></el-header>
+        <el-main class="el-main"
+          ><scroll-view :chat-list="chatList"></scroll-view
+        ></el-main>
+        <el-footer><chat-input @send="sendChat"></chat-input></el-footer>
+      </el-container>
     </el-container>
-    <el-aside width="200px"
-      ><room-aside :user-count="userCount"></room-aside
-    ></el-aside>
-  </el-container>
+  </div>
 </template>
 
 <script >
@@ -136,6 +138,25 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.outer-div {
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(
+    to top,
+    #fcc5e4 0%,
+    #fda34b 15%,
+    #ff7882 35%,
+    #c8699e 52%,
+    #7046aa 71%,
+    #0c1db8 87%,
+    #020f75 100%
+  );
+}
+/* 
+.outer-container {
+  margin: auto;
+} */
+
 .el-main {
   background-color: #eee;
   border-left: 1px solid #ddd;
@@ -161,11 +182,5 @@ export default {
   border: 1px solid #ddd;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-}
-
-.outer-container {
-  width: 70%;
-  margin: auto;
-  margin-top: 50px;
 }
 </style>

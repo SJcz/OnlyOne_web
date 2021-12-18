@@ -1,11 +1,12 @@
 import { createApp } from 'vue'
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+// import ElementPlus from 'element-plus'
+// import 'element-plus/dist/index.css'
 import App from './App.vue'
 import Wellcome from './pages/Wellcome.vue'
 import Chat from './pages/Chat.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { createStore } from 'vuex'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 // 2. 定义一些路由
 // 每个路由都需要映射到一个组件。
@@ -38,7 +39,7 @@ const store = createStore({
 	}
 })
 
-app.use(ElementPlus)
+// app.use(ElementPlus)
 app.use(router)
 app.use(store)
 app.mount('#app')

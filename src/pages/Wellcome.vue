@@ -1,22 +1,14 @@
 <template>
   <div class="wellcome">
-    <el-row>
-      <el-col :span="8" :offset="8">
-        <el-container style="height: 100%">
-          <el-header></el-header>
-          <el-main class="main">
-            <h1 class="cover-heading">Only One</h1>
-            <p>只有一个房间的聊天室</p>
-            <p>每次进入赋予一个全新的身份</p>
-            <p>进来就是开始, 离开就是结束...</p>
-            <p class="lead">
-              <button><router-link to="/chat">进入OnlyOne</router-link></button>
-            </p>
-          </el-main>
-          <el-footer class="el-footer"></el-footer>
-        </el-container>
-      </el-col>
-    </el-row>
+    <div class="row main-div">
+      <div class="col-md-offset-3 col-md-6">
+        <h1>Only One</h1>
+        <h5>只有一个房间的聊天室</h5>
+        <h5>每次进入赋予一个全新的身份</h5>
+        <h5>进来就是开始, 离开就是结束...</h5>
+        <button><router-link to="/chat">进入OnlyOne</router-link></button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,43 +28,30 @@ export default {
 .wellcome {
   width: 100%;
   text-align: center;
-  background-color: #333;
+  background-image: linear-gradient(
+    to top,
+    #fcc5e4 0%,
+    #fda34b 15%,
+    #ff7882 35%,
+    #c8699e 52%,
+    #7046aa 71%,
+    #0c1db8 87%,
+    #020f75 100%
+  );
   height: 100%;
+  color: white;
 }
 
-.main {
-  margin-top: 25%;
-}
-
-.cover-heading {
-  font-size: 2.5rem;
-  font-weight: 500;
-  line-height: 1.2;
-}
-
-p {
-  font-size: 1.2rem;
-  font-weight: 300;
-}
-
-button {
-  color: #333;
-  text-shadow: none;
-  background-color: #fff;
-  border: 0.05rem solid #fff;
-  padding: 0.75rem 1.25rem;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 1.25rem;
-  line-height: 1.5;
-  border-radius: 0.3rem;
+.main-div {
+  margin: 0;
+  padding: 0;
 }
 
 a {
   text-decoration: none;
-  color: #333;
+  color: #1c1e21;
 }
 .router-link-active {
-  color: #333;
+  color: #1c1e21;
 }
 </style>

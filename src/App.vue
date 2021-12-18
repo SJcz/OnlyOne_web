@@ -19,10 +19,7 @@ html {
   height: 100%;
 }
 body {
-  box-shadow: inset 0 0 5rem rgb(0 0 0 / 50%);
   display: flex;
-  color: #fff;
-  background-color: #333;
   height: auto;
   min-height: 100%;
   padding: 0;

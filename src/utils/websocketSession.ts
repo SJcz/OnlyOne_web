@@ -107,6 +107,4 @@ export default class WebsocketSession {
         if (this.state !== ST_INITED) return;
         this.websocket.close();
     }
-
-
 }
