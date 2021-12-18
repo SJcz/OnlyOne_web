@@ -23,7 +23,7 @@ export default {
 
 <style scoped>
 .aside {
-  color: black;
+  color: #333;
   padding: 10px;
 }
 

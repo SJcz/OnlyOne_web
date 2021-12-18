@@ -1,51 +1,47 @@
 <template>
-  <div class="chat-item">
-    <div
-      v-if="item.sender.userId !== curUser.userId"
-      class="left-chat-content-div"
-    >
-      <el-image class="user-avatar" :src="item.sender.avatar"></el-image>
-      <div class="user-name-and-content-div">
-        <div class="user-name">{{ item.sender.username }}</div>
-        <div
+<div class="chat-item">
+  <div class="media" v-if="item.sender.userId !== curUser.userId">
+    <div class="media-left" >
+      <a href="#">
+        <img class="media-object" :src="item.sender.avatar" >
+      </a>
+    </div>
+    <div class="media-body">
+      <h4 class="media-heading">{{item.sender.username}}</h4>
+      <div
           v-if="item.chat_message.type == 'text'"
-          class="text-div other-text-div"
-        >
+          class="text-div other-text-div">
           {{ item.chat_message.content }}
         </div>
         <div
           v-else-if="item.chat_message.type == 'picture'"
-          class="picture-div"
-        >
-          <el-image :src="item.chat_message.path"></el-image>
+          class="picture-div">
+          <image :src="item.chat_message.path"></image>
         </div>
-        <div
-          v-else-if="item.chat_message.type == 'voice'"
-          class="voice-div other-voice-div"
-        >
-          <el-image :src="item.chat_message.path" :click="playVoice"></el-image>
-        </div>
-      </div>
-    </div>
-    <div v-else class="right-chat-content-div">
-      <div
-        v-if="item.chat_message.type == 'text'"
-        class="text-div self-text-div"
-      >
-        {{ item.chat_message.content }}
-      </div>
-      <div v-else-if="item.chat_message.type == 'picture'" class="picture-div">
-        <el-image :src="item.chat_message.path"></el-image>
-      </div>
-      <div
-        v-else-if="item.chat_message.type == 'voice'"
-        class="voice-div self-voice-div"
-      >
-        <el-image :src="item.chat_message.path" :click="playVoice"></el-image>
-      </div>
-      <el-image class="user-avatar" :src="item.sender.avatar"></el-image>
     </div>
   </div>
+
+  <div class="media" v-else>
+    <div class="media-right" >
+      <a href="#">
+        <img class="media-object" alt="...">
+      </a>
+    </div>
+    <div class="media-body">
+      <h4 class="media-heading">Media heading</h4>
+      <div
+          v-if="item.chat_message.type == 'text'"
+          class="text-div other-text-div">
+          {{ item.chat_message.content }}
+        </div>
+        <div
+          v-else-if="item.chat_message.type == 'picture'"
+          class="picture-div">
+          <image :src="item.chat_message.path"></image>
+        </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -89,36 +85,24 @@ export default {
   margin: 30px 0px;
 }
 
-.left-chat-content-div {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.right-chat-content-div {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.user-avatar {
+.media-object {
   width: 30px;
   height: 30px;
   border-radius: 3px;
   margin: 0 15px;
 }
 
-.user-name {
+.media-heading {
   font-size: small;
   color: #aaa;
-  margin-top: -10px;
   margin-bottom: 5px;
 }
 
 .text-div {
-  position: relative;
-  color: #000;
+  color: #333;
   padding: 8px;
   border-radius: 5px;
-  max-width: 70%;
+  max-width: 50%;
   word-wrap: break-word; /*因为数字和字母不会自动换行，导致内容溢出*/
 }
 

@@ -1,22 +1,14 @@
 <template>
-  <div class="wellcome">
-    <el-row>
-      <el-col :span="8" :offset="8">
-        <el-container style="height: 100%">
-          <el-header></el-header>
-          <el-main class="main">
-            <h1 class="cover-heading">Only One</h1>
-            <p>只有一个房间的聊天室</p>
-            <p>每次进入赋予一个全新的身份</p>
-            <p>进来就是开始, 离开就是结束...</p>
-            <p class="lead">
-              <button><router-link to="/chat">进入OnlyOne</router-link></button>
-            </p>
-          </el-main>
-          <el-footer class="el-footer"></el-footer>
-        </el-container>
-      </el-col>
-    </el-row>
+  <div class="wellcome container">
+    <div class="row main-div">
+      <div class="col-lg-6 col-lg-offset-3">
+        <h1>Only One</h1>
+            <h2>只有一个房间的聊天室</h2>
+            <h2>每次进入赋予一个全新的身份</h2>
+            <h2>进来就是开始, 离开就是结束...</h2>
+            <button><router-link to="/chat">进入OnlyOne</router-link></button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,44 +27,62 @@ export default {
 <style scoped>
 .wellcome {
   width: 100%;
-  text-align: center;
-  background-color: #333;
   height: 100%;
+  font-family: "Libre Franklin", sans-serif;
+  background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
 }
 
-.main {
-  margin-top: 25%;
+.main-div {
+  margin-top: 15%;
 }
 
-.cover-heading {
-  font-size: 2.5rem;
-  font-weight: 500;
-  line-height: 1.2;
+h1{
+  text-transform: uppercase;
+  font-size: 26px;
+  position: relative;
+  padding-bottom: 20px;
+  margin: 0px 0px 20px;
 }
 
-p {
-  font-size: 1.2rem;
-  font-weight: 300;
+h2 {
+    max-width: 60%;
+    margin: 0px auto 20px;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: normal;
 }
 
 button {
-  color: #333;
-  text-shadow: none;
-  background-color: #fff;
-  border: 0.05rem solid #fff;
-  padding: 0.75rem 1.25rem;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 1.25rem;
-  line-height: 1.5;
-  border-radius: 0.3rem;
+    cursor: pointer;
+    box-shadow: rgba(50, 50, 93, 0.11) 2px 4px 6px, rgba(0, 0, 0, 0.08) 0px 1px 3px;
+    font-size: 14px;
+    line-height: 33px;
+    font-weight: 600;
+    position: relative;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+    backface-visibility: hidden;
+    color: rgb(119, 149, 248);
+    text-transform: uppercase;
+    height: 46px;
+    outline: none;
+    margin-top: 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.15s ease 0s, color 0s, box-shadow 0s, transform 0s, opacity 0s;
+    background: rgb(255, 255, 255);
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(250, 250, 250);     
+    border-image: initial;
+    padding: 0px 40px;
 }
 
 a {
   text-decoration: none;
-  color: #333;
 }
-.router-link-active {
-  color: #333;
-}
+
 </style>
