@@ -22,14 +22,13 @@ export default {
 
 <style scoped>
 .header {
-  height: 100%;
-  color: #000;
+  color: white;
   font-size: larger;
+  background-color: #333;
 }
 
 .header span {
   display: block;
-  position: relative;
-  top: 20px;
+  margin: 10px 0 0 20px;
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
-  <div class="wellcome">
+  <div class="wellcome container">
     <div class="row main-div">
-      <div class="col-md-offset-3 col-md-6">
+      <div class="col-lg-6 col-lg-offset-3">
         <h1>Only One</h1>
-        <h5>只有一个房间的聊天室</h5>
-        <h5>每次进入赋予一个全新的身份</h5>
-        <h5>进来就是开始, 离开就是结束...</h5>
+        <h2>只有一个房间的聊天室</h2>
+        <h2>每次进入赋予一个全新的身份</h2>
+        <h2>进来就是开始, 离开就是结束...</h2>
         <button><router-link to="/chat">进入OnlyOne</router-link></button>
       </div>
     </div>
@@ -27,31 +27,58 @@ export default {
 <style scoped>
 .wellcome {
   width: 100%;
-  text-align: center;
-  background-image: linear-gradient(
-    to top,
-    #fcc5e4 0%,
-    #fda34b 15%,
-    #ff7882 35%,
-    #c8699e 52%,
-    #7046aa 71%,
-    #0c1db8 87%,
-    #020f75 100%
-  );
   height: 100%;
-  color: white;
+  font-family: "Libre Franklin", sans-serif;
+  background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
 }
-
 .main-div {
-  margin: 0;
-  padding: 0;
+  margin-top: 15%;
 }
-
+h1 {
+  text-transform: uppercase;
+  font-size: 26px;
+  position: relative;
+  padding-bottom: 20px;
+  margin: 0px 0px 20px;
+}
+h2 {
+  max-width: 60%;
+  margin: 0px auto 20px;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: normal;
+}
+button {
+  cursor: pointer;
+  box-shadow: rgba(50, 50, 93, 0.11) 2px 4px 6px,
+    rgba(0, 0, 0, 0.08) 0px 1px 3px;
+  font-size: 14px;
+  line-height: 33px;
+  font-weight: 600;
+  position: relative;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  backface-visibility: hidden;
+  color: rgb(119, 149, 248);
+  text-transform: uppercase;
+  height: 46px;
+  outline: none;
+  margin-top: 10px;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.15s ease 0s, color 0s, box-shadow 0s, transform 0s,
+    opacity 0s;
+  background: rgb(255, 255, 255);
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgb(250, 250, 250);
+  border-image: initial;
+  padding: 0px 40px;
+}
 a {
   text-decoration: none;
-  color: #1c1e21;
-}
-.router-link-active {
-  color: #1c1e21;
 }
 </style>

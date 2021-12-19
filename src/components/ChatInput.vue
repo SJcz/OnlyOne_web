@@ -5,7 +5,7 @@
     <textarea
       v-model="textarea"
       rows="5"
-      placeholder="Please input"
+      placeholder=""
       @keydown.enter="keyDown"
     />
   </div>
@@ -46,9 +46,11 @@ export default {
 <style scoped>
 .footer {
   width: 100%;
+  padding: 10px;
 }
 
 .footer > textarea {
+  color: #333;
   resize: none;
   background-color: #eee;
   outline: #eee;

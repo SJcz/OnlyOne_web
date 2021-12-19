@@ -1,6 +1,5 @@
 <template>
-  <el-scrollbar class="scrollbar" max-height="400px" ref="scrollbar">
-    <div ref="inner" id="inner">
+<div class="scrollbar">
       <scroll-view-item
         v-for="item in chatList"
         :key="item"
@@ -8,8 +7,8 @@
         :id="item.scrollId"
       >
       </scroll-view-item>
-    </div>
-  </el-scrollbar>
+
+</div>
 </template>
 
 <script>
@@ -43,8 +42,6 @@ export default {
 
 <style scoped>
 .scrollbar {
-  height: 400px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  height: 100%;
 }
 </style>
