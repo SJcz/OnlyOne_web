@@ -1,6 +1,6 @@
 # onlyone_web
 onlyone 项目的 web 端
-demo: http://150.158.173.31:8080
+demo: 开发中
 
 ## Project setup
 ```
