@@ -12,14 +12,14 @@
 </template>
 
 <script >
-import biaoqing_icon from "@/assets/biaoqing_icon.png";
+// import biaoqing_icon from "@/assets/biaoqing_icon.png";
 export default {
   name: "ChatInput",
   data() {
     return {
       roomName: "",
       textarea: "",
-      biaoqing_icon: biaoqing_icon,
+      // biaoqing_icon: biaoqing_icon,
     };
   },
   methods: {

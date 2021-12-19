@@ -28,8 +28,19 @@ export default {
 .wellcome {
   width: 100%;
   height: 100%;
+  color: white;
+  text-align: center;
   font-family: "Libre Franklin", sans-serif;
-  background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+  background-image: linear-gradient(
+    to top,
+    #fcc5e4 0%,
+    #fda34b 15%,
+    #ff7882 35%,
+    #c8699e 52%,
+    #7046aa 71%,
+    #0c1db8 87%,
+    #020f75 100%
+  );
 }
 .main-div {
   margin-top: 15%;
@@ -78,7 +89,7 @@ button {
   border-image: initial;
   padding: 0px 40px;
 }
-a {
+button a {
   text-decoration: none;
 }
 </style>
