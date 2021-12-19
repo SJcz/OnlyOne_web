@@ -9,7 +9,7 @@
         "
       >
         <div class="room-aside">
-          <room-aside :user-count="userCount"></room-aside>
+          <room-aside :user-count="userCount" :system-info="systemInfo" :connect-info="connectInfo"></room-aside>
         </div>
       </div>
       <div class="col-lg-6 col-md-8 col-sm-10 col-xs-10 padding-0">
@@ -49,6 +49,12 @@ export default {
       chatList: [],
       roomId: "onlyOne",
       userCount: 0,
+			systemInfo: {
+				process: {},
+				memory: {},
+				cpu_usage: {}
+			},
+			connectInfo: []
     };
   },
   computed: {
@@ -57,6 +63,20 @@ export default {
     },
   },
   methods: {
+		fromatDate(date) {
+      return (
+        date.getMonth() +
+        1 +
+        "-" +
+        date.getDate() +
+        " " +
+        date.getHours() +
+        ":" +
+        (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) +
+				":" + 
+				(date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
+      )
+		},
     uuid() {
       let s = [];
       let hexDigits = "0123456789abcdef";
@@ -70,13 +90,18 @@ export default {
       const wsuri = `ws://${config.ws_server_host}:${config.ws_server_port}`;
       const websocket = new WebSocket(wsuri);
       this.websocketSession = new WebsocketSession(websocket);
+			this.connectInfo.push({
+				type: "normal",
+				date: this.fromatDate(new Date()),
+				info: '正在连接服务器...'
+			})
       this.websocketSession.on("open", this.websocket_onOpen.bind(this));
       this.websocketSession.on("error", this.websocket_onError.bind(this));
       this.websocketSession.on("close", this.websocket_onClose.bind(this));
       this.websocketSession.on("push", this.websocket_onPush.bind(this));
     },
     websocket_onPush(message) {
-      console.log(message);
+      // console.log(message);
       switch (message.route) {
         case "room.join":
           this.messageHandler_joinRoom(message.data);
@@ -87,6 +112,11 @@ export default {
       }
     },
     websocket_onOpen() {
+			this.connectInfo.push({
+				type: "success",
+				date: this.fromatDate(new Date()),
+				info: '成功连接上服务器'
+			})
       this.websocketSession
         .request({
           route: "roomHandler.joinRoom",
@@ -98,38 +128,54 @@ export default {
           this.$store.commit("update", result.user);
           this.websocketSession
             .request({
-              route: "roomHandler.getRoomAllUserNum",
+              route: "roomHandler.getRoomInfo",
               data: {
                 room_id: this.roomId,
               },
             })
-            .then((num) => {
-              this.userCount = num + 1;
+            .then((result) => {
+              this.userCount = result.room_user_count + 1;
+							this.systemInfo = result.system_info;
             });
           setInterval(() => {
             this.websocketSession
               .request({
-                route: "roomHandler.getRoomAllUserNum",
+                route: "roomHandler.getRoomInfo",
                 data: {
                   room_id: this.roomId,
                 },
               })
-              .then((num) => {
-                this.userCount = num;
+              .then((result) => {
+                this.userCount = result.room_user_count;
+								this.systemInfo = result.system_info;
               });
-          }, 10000);
+          }, 5000);
         })
         .catch(console.log);
     },
     websocket_onClose(e) {
       console.log("断开连接", e);
+			this.connectInfo.push({
+				type: "error",
+				date: this.fromatDate(new Date()),
+				info: '跟服务器断开连接'
+			})
     },
     websocket_onError(err) {
       console.log(err);
+			this.connectInfo.push({
+				type: "error",
+				date: this.fromatDate(new Date()),
+				info: '连接错误'
+			})
     },
     messageHandler_joinRoom() {},
     messageHandler_roomChat(data) {
       data.scrollId = "chat-" + this.uuid();
+			if (this.chatList.length >= 500) {
+				this.chatList = this.chatList.slice(-500)
+			}
+			console.log(data)
       this.chatList.push(data);
     },
     sendChat(chat_message) {
@@ -161,7 +207,16 @@ export default {
   width: 100%;
   height: 100%;
   font-family: "Libre Franklin", sans-serif;
-  background-image: linear-gradient(
+}
+
+.chat::before{
+	content:"";
+	position:absolute;
+	top:0;
+	left:0;
+	width: 100%;
+  height: 100%;
+	background-image: linear-gradient(
     to top,
     #fcc5e4 0%,
     #fda34b 15%,
@@ -171,9 +226,13 @@ export default {
     #0c1db8 87%,
     #020f75 100%
   );
+	/* background-image: url('../assets/bk.jpg'); */
+	z-index:-1;
+	background-size:cover;
 }
+
 .room-main {
-  margin-top: 5%;
+  padding-top: 5%;
   display: flex;
 }
 
@@ -191,12 +250,9 @@ export default {
 }
 
 .room-scroller {
-  /* min-height: 400px; */
   height: 500px;
-  /* height: 50%; */
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.4);
   border-bottom: 1px solid #aaa;
-  /* overflow-y: auto; */
   border-left: 1px solid #aaa;
 }
 
@@ -209,8 +265,20 @@ export default {
 
 .room-aside {
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.4);
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
+}
+
+.successAlert.show{
+	position: absolute;
+	top: 10px;
+	left: 50%;
+}
+
+.successAlert.hide{
+	position: absolute;
+	top: 0px;
+	left: 50%;
 }
 </style>

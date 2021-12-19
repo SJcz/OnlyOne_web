@@ -8,17 +8,35 @@
       </div>
       <div class="media-body">
         <h4 class="media-heading">{{ curUser.username }}</h4>
-        <span>注册时间: {{ registerTime }}</span>
+        <span>注册: {{ registerTime }}</span>
       </div>
     </div>
-    <div class="user-num-info">
-      <p>每 10s 刷新一次在线人数</p>
-      <span>当前在线人数: {{ userCount }}</span>
+    <div class="system-info">
+      <label>每 5s 刷新一次下列信息:</label>
+      <div>
+        <p>当前在线人数: {{ userCount }}</p>
+      </div>
+      <div>
+        <p>服务器进程信息:</p>
+        <span>连接进程数量: {{ systemInfo.process.worker_num}}</span>
+        <span>当前连接进程ID: {{ systemInfo.process.process_id}}</span>
+        <span>当前连接进程用户数量: {{ systemInfo.process.process_session_num}}</span>
+      </div>
+      <div>
+        <p>进程内存信息:</p>
+        <span>heapTotal: {{ systemInfo.memory.heapTotal}} M</span>
+        <span>heapUsed: {{ systemInfo.memory.heapUsed}} M</span>
+        <span>rss: {{ systemInfo.memory.rss}} M</span>
+      </div>
+      <div>
+        <p>进程 CPU 使用信息:</p>
+        <span>user: {{ systemInfo.cpu_usage.user }} ms</span>
+        <span>system: {{ systemInfo.cpu_usage.system }} ms</span>
+      </div>
     </div>
-    <div class="setting-info">
-      <ul class="list-group">
-        <!-- <li class="list-group-item"><img :src="github_img" alt="" /></li> -->
-      </ul>
+    <div class="connect-info">
+      <span v-for="item in connectInfo" :key="item" :class="item.type"
+      :item="item">{{item.date}}  {{item.info}}</span>
     </div>
   </div>
 </template>
@@ -28,7 +46,8 @@ import github_img from "@/assets/github.svg";
 export default {
   props: {
     userCount: Number,
-    userList: Array,
+    systemInfo: Object,
+    connectInfo: Array
   },
   name: "RoomAside",
   data() {
@@ -44,14 +63,13 @@ export default {
       return this.$store.state.user;
     },
     registerTime() {
-      console.log(this.$store.state.user);
       const date = new Date(this.$store.state.user.register_time);
       return (
         date.toLocaleDateString() +
         " " +
         date.getHours() +
         ":" +
-        date.getMinutes()
+        (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
       );
     },
   },
@@ -60,11 +78,8 @@ export default {
 
 
 <style scoped>
-.aside {
-}
 
 .user-info {
-  /* border-bottom: 1px solid #ddd; */
   padding: 10px;
 }
 
@@ -89,7 +104,48 @@ export default {
   margin-top: 20px;
   font-size: small;
   color: #222;
-  /* border-bottom: 1px solid #ddd; */
   padding: 10px;
 }
+
+
+.setting-info {
+  margin-top: 20px;
+  font-size: small;
+  color: #222;
+  padding: 10px;
+}
+
+label {
+  font-size: xx-small;
+  color: #d3706e;
+  margin: 10px;
+}
+
+
+.system-info div {
+  padding: 10px 10px;
+}
+
+.connect-info {
+  padding: 10px 10px;
+}
+
+span {
+  font-size: x-small;
+  color: #333;
+  display: block;
+  margin: 10px 0;
+}
+
+span.error {
+  color: rgb(153, 37, 37);
+}
+span.success {
+  color: rgb(64, 122, 41);
+}
+
+p {
+  margin: 0;
+}
+
 </style>

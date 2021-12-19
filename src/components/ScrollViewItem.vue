@@ -14,7 +14,7 @@
         <div
           v-if="item.chat_message.type == 'text'"
           class="text-div other-text-div"
-          v-html="item.chat_message.content.replace(/\s+/g, '<br>')"
+          v-html="item.chat_message.content.replace(/\n/g, '<br>')"
         ></div>
         <div
           v-else-if="item.chat_message.type == 'picture'"
@@ -33,7 +33,7 @@
         <div
           v-if="item.chat_message.type == 'text'"
           class="text-div self-text-div"
-          v-html="item.chat_message.content.replace(/\s+/g, '<br>')"
+           v-html="item.chat_message.content.replace(/\n/g, '<br>')"
         ></div>
         <div
           v-else-if="item.chat_message.type == 'picture'"
@@ -93,7 +93,7 @@ export default {
         " " +
         date.getHours() +
         ":" +
-        date.getMinutes()
+        (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
       );
     },
   },
@@ -121,7 +121,7 @@ export default {
 
 .media-heading {
   font-size: small;
-  color: #555;
+  color: #444;
   margin-bottom: 5px;
 }
 

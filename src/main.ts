@@ -27,7 +27,7 @@ const app = createApp(App)
 const store = createStore({
 	state() {
 		return {
-			user: null
+			user: {}
 		}
 	},
 	mutations: {
