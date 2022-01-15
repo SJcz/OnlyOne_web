@@ -34,6 +34,7 @@ import RoomHeader from "../components/RoomHeader.vue";
 import ScrollView from "../components/ScrollView.vue";
 import WebsocketSession from "../utils/websocketSession";
 import config from "../config/config";
+import { encrptToken } from "../utils/utils";
 export default {
   components: {
     "room-header": RoomHeader,
@@ -87,7 +88,8 @@ export default {
       return s.join("");
     },
     initWebsocket() {
-      const wsuri = `ws://${config.ws_server_host}:${config.ws_server_port}`;
+      const token = encrptToken()
+      const wsuri = `ws://${config.ws_server_host}:${config.ws_server_port}/websocket?token=${token}`;
       const websocket = new WebSocket(wsuri);
       this.websocketSession = new WebsocketSession(websocket);
 			this.connectInfo.push({
