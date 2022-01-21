@@ -8,9 +8,17 @@
     <div class="vuw-emoji-picker-container" v-show="!emojiPickerHide">
       <VuemojiPicker @emojiClick="handleEmojiClick" />
     </div>
-    <img :src="picture_icon" class="img-rounded img-icon" />
+    <img :src="picture_icon" class="img-rounded img-icon" @click="selectFile" />
+    <!-- 给这个input 设置样式隐藏，切忌不可用display控制隐藏,可能不能跨浏览器 -->
+    <input
+      type="file"
+      ref="fileInput"
+      @change="getFilePath"
+      style="filter: alpha(opacity=0); opacity: 0; width: 0; height: 0"
+    />
     <textarea
-      v-model="textarea"
+      ref="textarea"
+      v-model="textareaText"
       rows="5"
       placeholder=""
       @keydown.enter="keyDown"
@@ -30,7 +38,7 @@ export default {
   data() {
     return {
       roomName: "",
-      textarea: "",
+      textareaText: "",
       emojiPickerHide: true,
       biaoqing_icon: biaoqing_icon,
       picture_icon: picture_icon,
@@ -42,15 +50,16 @@ export default {
     },
     handleEmojiClick(detail) {
       this.emojiPickerHide = true;
-      this.textarea += detail.unicode;
+      this.textareaText += detail.unicode;
+      this.$refs.textarea.focus();
     },
     sendMessage() {
-      if (!this.textarea || !this.textarea.trim()) return;
+      if (!this.textareaText || !this.textareaText.trim()) return;
       this.$emit("send", {
         type: "text",
-        content: this.textarea,
+        content: this.textareaText,
       });
-      this.textarea = "";
+      this.textareaText = "";
     },
     keyDown(e) {
       if (e.ctrlKey) {
@@ -59,6 +68,19 @@ export default {
         e.preventDefault();
         this.sendMessage();
       }
+    },
+    selectFile() {
+      this.$refs.fileInput.click();
+    },
+    getFilePath(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      this.$store.state.cosHelper.uploadFile(file, (url) => {
+        this.$emit("send", {
+          type: "picture",
+          path: url,
+        });
+      });
     },
   },
 };

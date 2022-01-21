@@ -18,9 +18,13 @@
         ></div>
         <div
           v-else-if="item.chat_message.type == 'picture'"
-          class="picture-div"
+          class="picture-div other-picture-div"
         >
-          <image :src="item.chat_message.path"></image>
+          <img
+            :src="item.chat_message.path"
+            class="img-thumbnail"
+            @click="reviewImage"
+          />
         </div>
       </div>
     </div>
@@ -33,13 +37,17 @@
         <div
           v-if="item.chat_message.type == 'text'"
           class="text-div self-text-div"
-           v-html="item.chat_message.content.replace(/\n/g, '<br>')"
+          v-html="item.chat_message.content.replace(/\n/g, '<br>')"
         ></div>
         <div
           v-else-if="item.chat_message.type == 'picture'"
-          class="picture-div"
+          class="picture-div self-picture-div"
         >
-          <image :src="item.chat_message.path"></image>
+          <img
+            :src="item.chat_message.path"
+            class="img-thumbnail"
+            @click="reviewImage"
+          />
         </div>
       </div>
       <div class="media-right">
@@ -60,24 +68,23 @@ export default {
   },
 
   name: "ScrollViewItem",
-  methods() {
-    return {
-      // 点击预览图片
-      divFullPicture: function () {
-        // var path = e.currentTarget.dataset.path
-        // wx.predivImage({
-        //   current: path,
-        //   urls: [path]
-        // })
-      },
-      // 点击播放语音
-      playVoice: function () {
-        // var path = e.currentTarget.dataset.path
-        // wx.playVoice({
-        //   filePath: path
-        // })
-      },
-    };
+  methods: {
+    // 点击预览图片
+    reviewImage: function (e) {
+      console.log(e.target.src);
+      // var path = e.currentTarget.dataset.path
+      // wx.predivImage({
+      //   current: path,
+      //   urls: [path]
+      // })
+    },
+    // 点击播放语音
+    playVoice: function () {
+      // var path = e.currentTarget.dataset.path
+      // wx.playVoice({
+      //   filePath: path
+      // })
+    },
   },
   computed: {
     curUser() {
@@ -93,7 +100,7 @@ export default {
         " " +
         date.getHours() +
         ":" +
-        (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
+        (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes())
       );
     },
   },
@@ -147,40 +154,23 @@ export default {
   word-wrap: break-word; /*因为数字和字母不会自动换行，导致内容溢出*/
 }
 
-.voice-div {
+.picture-div {
   position: relative;
   border-radius: 5px;
-  width: 50px;
+  width: 300px;
   text-align: center;
+  cursor: pointer;
 }
 
 .other-text-div,
-.other-voice-div {
+.other-picture-div {
   background-color: #fff;
   float: left;
 }
 
 .self-text-div,
-.self-voice-div {
+.self-picture-div {
   background-color: #52b061;
   float: right;
-}
-
-.picture-div image {
-  border-radius: 5px;
-  background-color: #fff;
-  width: 200px;
-}
-
-.other-voice-div image {
-  width: 25px;
-  height: 25px;
-  margin-top: 5px;
-}
-
-.self-voice-div image {
-  width: 25px;
-  height: 25px;
-  margin-top: 5px;
 }
 </style>

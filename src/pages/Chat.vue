@@ -9,7 +9,11 @@
         "
       >
         <div class="room-aside">
-          <room-aside :user-count="userCount" :system-info="systemInfo" :connect-info="connectInfo"></room-aside>
+          <room-aside
+            :user-count="userCount"
+            :system-info="systemInfo"
+            :connect-info="connectInfo"
+          ></room-aside>
         </div>
       </div>
       <div class="col-lg-6 col-md-8 col-sm-10 col-xs-10 padding-0">
@@ -34,7 +38,8 @@ import RoomHeader from "../components/RoomHeader.vue";
 import ScrollView from "../components/ScrollView.vue";
 import WebsocketSession from "../utils/websocketSession";
 import config from "../config/config";
-import { encrptToken } from "../utils/utils";
+import { encrptToken, uuid } from "../utils/utils";
+import COSHelper from "../utils/cos.helper";
 export default {
   components: {
     "room-header": RoomHeader,
@@ -50,12 +55,12 @@ export default {
       chatList: [],
       roomId: "onlyOne",
       userCount: 0,
-			systemInfo: {
-				process: {},
-				memory: {},
-				cpu_usage: {}
-			},
-			connectInfo: []
+      systemInfo: {
+        process: {},
+        memory: {},
+        cpu_usage: {},
+      },
+      connectInfo: [],
     };
   },
   computed: {
@@ -64,7 +69,7 @@ export default {
     },
   },
   methods: {
-		fromatDate(date) {
+    fromatDate(date) {
       return (
         date.getMonth() +
         1 +
@@ -73,34 +78,31 @@ export default {
         " " +
         date.getHours() +
         ":" +
-        (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) +
-				":" + 
-				(date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
-      )
-		},
-    uuid() {
-      let s = [];
-      let hexDigits = "0123456789abcdef";
-      for (var i = 0; i < 36; i++) {
-        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-      }
-      s[8] = s[13] = s[18] = s[23] = "-";
-      return s.join("");
+        (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
+        ":" +
+        (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds())
+      );
     },
     initWebsocket() {
-      const token = encrptToken()
+      const token = encrptToken();
       const wsuri = `ws://${config.ws_server_host}:${config.ws_server_port}/websocket?token=${token}`;
       const websocket = new WebSocket(wsuri);
       this.websocketSession = new WebsocketSession(websocket);
-			this.connectInfo.push({
-				type: "normal",
-				date: this.fromatDate(new Date()),
-				info: '正在连接服务器...'
-			})
+      this.connectInfo.push({
+        type: "normal",
+        date: this.fromatDate(new Date()),
+        info: "正在连接服务器...",
+      });
       this.websocketSession.on("open", this.websocket_onOpen.bind(this));
       this.websocketSession.on("error", this.websocket_onError.bind(this));
       this.websocketSession.on("close", this.websocket_onClose.bind(this));
       this.websocketSession.on("push", this.websocket_onPush.bind(this));
+    },
+    initCosHelper() {
+      const token = encrptToken();
+      const cosHelper = new COSHelper();
+      cosHelper.initCos(token);
+      this.$store.commit("updateCosHelper", cosHelper);
     },
     websocket_onPush(message) {
       // console.log(message);
@@ -114,11 +116,11 @@ export default {
       }
     },
     websocket_onOpen() {
-			this.connectInfo.push({
-				type: "success",
-				date: this.fromatDate(new Date()),
-				info: '成功连接上服务器'
-			})
+      this.connectInfo.push({
+        type: "success",
+        date: this.fromatDate(new Date()),
+        info: "成功连接上服务器",
+      });
       this.websocketSession
         .request({
           route: "roomHandler.joinRoom",
@@ -127,7 +129,7 @@ export default {
           },
         })
         .then((result) => {
-          this.$store.commit("update", result.user);
+          this.$store.commit("updateUser", result.user);
           this.websocketSession
             .request({
               route: "roomHandler.getRoomInfo",
@@ -137,7 +139,7 @@ export default {
             })
             .then((result) => {
               this.userCount = result.room_user_count + 1;
-							this.systemInfo = result.system_info;
+              this.systemInfo = result.system_info;
             });
           setInterval(() => {
             this.websocketSession
@@ -149,7 +151,7 @@ export default {
               })
               .then((result) => {
                 this.userCount = result.room_user_count;
-								this.systemInfo = result.system_info;
+                this.systemInfo = result.system_info;
               });
           }, 5000);
         })
@@ -157,27 +159,27 @@ export default {
     },
     websocket_onClose(e) {
       console.log("断开连接", e);
-			this.connectInfo.push({
-				type: "error",
-				date: this.fromatDate(new Date()),
-				info: '跟服务器断开连接'
-			})
+      this.connectInfo.push({
+        type: "error",
+        date: this.fromatDate(new Date()),
+        info: "跟服务器断开连接",
+      });
     },
     websocket_onError(err) {
       console.log(err);
-			this.connectInfo.push({
-				type: "error",
-				date: this.fromatDate(new Date()),
-				info: '连接错误'
-			})
+      this.connectInfo.push({
+        type: "error",
+        date: this.fromatDate(new Date()),
+        info: "连接错误",
+      });
     },
     messageHandler_joinRoom() {},
     messageHandler_roomChat(data) {
-      data.scrollId = "chat-" + this.uuid();
-			if (this.chatList.length >= 500) {
-				this.chatList = this.chatList.slice(-500)
-			}
-			console.log(data)
+      data.scrollId = "chat-" + uuid();
+      if (this.chatList.length >= 500) {
+        this.chatList = this.chatList.slice(-500);
+      }
+      console.log(data);
       this.chatList.push(data);
     },
     sendChat(chat_message) {
@@ -199,6 +201,7 @@ export default {
       return alert(`当前浏览器不支持 websocket, 请更换浏览器`);
     }
     this.initWebsocket();
+    this.initCosHelper();
   },
 };
 </script>
@@ -211,14 +214,14 @@ export default {
   font-family: "Libre Franklin", sans-serif;
 }
 
-.chat::before{
-	content:"";
-	position:absolute;
-	top:0;
-	left:0;
-	width: 100%;
+.chat::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
-	background-image: linear-gradient(
+  background-image: linear-gradient(
     to top,
     #fcc5e4 0%,
     #fda34b 15%,
@@ -228,9 +231,9 @@ export default {
     #0c1db8 87%,
     #020f75 100%
   );
-	/* background-image: url('../assets/bk.jpg'); */
-	z-index:-1;
-	background-size:cover;
+  /* background-image: url('../assets/bk.jpg'); */
+  z-index: -1;
+  background-size: cover;
 }
 
 .room-main {
@@ -272,15 +275,15 @@ export default {
   border-top-left-radius: 5px;
 }
 
-.successAlert.show{
-	position: absolute;
-	top: 10px;
-	left: 50%;
+.successAlert.show {
+  position: absolute;
+  top: 10px;
+  left: 50%;
 }
 
-.successAlert.hide{
-	position: absolute;
-	top: 0px;
-	left: 50%;
+.successAlert.hide {
+  position: absolute;
+  top: 0px;
+  left: 50%;
 }
 </style>

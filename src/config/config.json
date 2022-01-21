@@ -1,5 +1,6 @@
 {
   "ws_server_host": "127.0.0.1",
   "ws_server_port": 9090,
-  "secret_key": "a_secret_key__16"
+  "secret_key": "a_secret_key__16",
+  "http_server_url": "http://127.0.0.1:10010"
 }

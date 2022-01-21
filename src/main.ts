@@ -5,6 +5,7 @@ import Chat from './pages/Chat.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { createStore } from 'vuex'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import COSHelper from './utils/cos.helper'
 
 // 2. 定义一些路由
 // 每个路由都需要映射到一个组件。
@@ -27,11 +28,15 @@ const app = createApp(App)
 const store = createStore({
 	state() {
 		return {
-			user: {}
+			user: {},
+			cosHelper: null
 		}
 	},
 	mutations: {
-		update(state: any, user) {
+		updateCosHelper(state: any, cosHelper: COSHelper) {
+			state.cosHelper = cosHelper
+		},
+		updateUser(state: any, user) {
 			state.user = user
 		}
 	}
